@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="description" content="Corujão na Santos Games Arena — regras, horários, preços e tudo que você precisa saber." />
+  <meta name="theme-color" content="#000000" />
+  <title>Corujão | Santos Games Arena</title>
+  <link rel="icon" type="image/png" href="./image/logo-sg.png">
+
+  <style>
+    :root{
+      --red:#e4021a;
+      --black:#000;
+      --white:#fff;
+
+      --bg:#050506;
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+
+      --radius: 20px;
+      --radius-shell: 40px;
+
+      --blur: 18px;
+      --sat: 1.25;
+
+      --maxw: 980px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x:hidden;
+    }
+
+    /* ===== Fundo premium ===== */
+    .bg{
+      position:fixed; inset:0; z-index:-3;
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(228,2,26,.25), transparent 60%),
+        radial-gradient(900px 700px at 90% 20%, rgba(255,255,255,.08), transparent 55%),
+        radial-gradient(1000px 800px at 55% 105%, rgba(228,2,26,.14), transparent 55%),
+        linear-gradient(180deg, #040405 0%, #09090b 55%, #040405 100%);
+    }
+    .shards{
+      position:fixed; inset:-10%; z-index:-2; pointer-events:none;
+      background:
+        conic-gradient(from 220deg at 20% 35%, rgba(255,255,255,.14), transparent 35%, rgba(255,255,255,.08), transparent 68%),
+        conic-gradient(from 120deg at 80% 25%, rgba(255,255,255,.10), transparent 40%, rgba(228,2,26,.10), transparent 70%),
+        conic-gradient(from 30deg at 55% 75%, rgba(255,255,255,.08), transparent 35%, rgba(255,255,255,.05), transparent 70%);
+      filter: blur(18px);
+      opacity:.75;
+      transform: rotate(6deg);
+      mix-blend-mode: screen;
+    }
+    .grain{
+      position:fixed; inset:-30%; z-index:-1; pointer-events:none;
+      background-image:
+        repeating-radial-gradient(circle at 20% 30%, rgba(255,255,255,.08) 0 1px, transparent 1px 7px),
+        repeating-radial-gradient(circle at 75% 60%, rgba(255,255,255,.06) 0 1px, transparent 1px 9px);
+      opacity:.14;
+      filter: blur(.35px);
+      transform: rotate(7deg);
+      mix-blend-mode: soft-light;
+    }
+
+    /* ===== Layout ===== */
+    .wrap{
+      min-height:100%;
+      display:flex;
+      justify-content:center;
+      padding: max(18px, env(safe-area-inset-top)) 18px max(22px, env(safe-area-inset-bottom));
+    }
+    .shell{
+      width:min(96vw, var(--maxw));
+      border-radius: var(--radius-shell);
+      padding: 18px;
+      position:relative;
+
+      background: linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow:
+        0 35px 120px rgba(0,0,0,.65),
+        inset 0 1px 0 rgba(255,255,255,.14);
+
+      backdrop-filter: blur(14px) saturate(1.1);
+      -webkit-backdrop-filter: blur(14px) saturate(1.1);
+      overflow:hidden;
+
+      isolation:isolate;
+      contain: paint;
+    }
+    .shell::before{
+      content:"";
+      position:absolute; inset:-30%;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.14), transparent 45%),
+        radial-gradient(circle at 70% 30%, rgba(228,2,26,.16), transparent 52%);
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    /* ===== Top bar ===== */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 6px 6px 14px;
+      position:relative;
+      z-index:2;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width:0;
+    }
+    .brand-badge{
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+
+      background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.22);
+      box-shadow: 0 12px 35px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.28);
+      backdrop-filter: blur(14px) saturate(1.15);
+      -webkit-backdrop-filter: blur(14px) saturate(1.15);
+
+      isolation:isolate;
+      contain: paint;
+    }
+    .brand-badge img{
+      width: 24px; height: 24px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,.35));
+    }
+    .brand-text{
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+    }
+    .brand-text .name{
+      font-weight: 850;
+      font-size: 13px;
+      letter-spacing:.15px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .brand-text .sub{
+      font-size: 12px;
+      color: var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      appearance:none;
+      border:0;
+      cursor:pointer;
+      text-decoration:none;
+      color: rgba(255,255,255,.92);
+      font-weight: 850;
+      font-size: 12px;
+      letter-spacing:.2px;
+
+      padding: 10px 12px;
+      border-radius: 999px;
+
+      background: linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 14px 38px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.18);
+      backdrop-filter: blur(12px) saturate(1.15);
+      -webkit-backdrop-filter: blur(12px) saturate(1.15);
+      transition: transform .18s ease, filter .18s ease, border-color .18s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.26); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btn-primary{
+      background: linear-gradient(135deg, rgba(228,2,26,.70), rgba(255,255,255,.10));
+      border: 1px solid rgba(255,255,255,.22);
+      box-shadow: 0 18px 44px rgba(228,2,26,.18), 0 14px 38px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.22);
+    }
+
+    /* ===== Hero ===== */
+    .hero{
+      position:relative;
+      z-index:1;
+      border-radius: 28px;
+      overflow:hidden;
+
+      background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 22px 70px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.16);
+      backdrop-filter: blur(var(--blur)) saturate(var(--sat));
+      -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--sat));
+
+      isolation:isolate;
+      contain: paint;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute; inset:0;
+      border-radius: inherit;
+      padding: 1px;
+      background:
+        conic-gradient(from 180deg at 50% 50%,
+          rgba(255,255,255,.38),
+          rgba(228,2,26,.42),
+          rgba(255,255,255,.18),
+          rgba(160,190,255,.18),
+          rgba(255,255,255,.34)
+        );
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity:.55;
+      pointer-events:none;
+      z-index:2;
+    }
+
+    .hero-bg{
+      position:absolute; inset:0;
+      background-size: cover;
+      background-position: center;
+      background-repeat:no-repeat;
+      transform: scale(1.03);
+      z-index:0;
+    }
+    .hero-scrim{
+      position:absolute; inset:0;
+      z-index:1;
+      background:
+        radial-gradient(800px 340px at 50% 0%, rgba(0,0,0,.55), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,.65) 0%, rgba(0,0,0,.35) 45%, rgba(0,0,0,.70) 100%);
+      pointer-events:none;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:3;
+      padding: 22px 18px 18px;
+      display:grid;
+      gap: 14px;
+    }
+
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing:.4px;
+      text-transform: uppercase;
+      width: fit-content;
+
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.40);
+      border: 1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .kicker .dot{
+      width:8px; height:8px;
+      border-radius:999px;
+      background: var(--red);
+      box-shadow: 0 0 0 4px rgba(228,2,26,.18);
+    }
+
+    .hero-title{
+      margin:0;
+      font-size: clamp(24px, 3.2vw, 34px);
+      font-weight: 950;
+      letter-spacing:.2px;
+      line-height: 1.05;
+    }
+    .hero-sub{
+      margin:0;
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      line-height: 1.35;
+      max-width: 62ch;
+    }
+
+    .hero-chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .chip{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 10px 12px;
+      border-radius: 16px;
+
+      background: rgba(0,0,0,.38);
+      border: 1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(10px) saturate(1.05);
+      -webkit-backdrop-filter: blur(10px) saturate(1.05);
+      box-shadow: 0 14px 38px rgba(0,0,0,.35);
+      font-size: 12px;
+      color: rgba(255,255,255,.88);
+      font-weight: 850;
+    }
+    .chip span{
+      color: rgba(255,255,255,.70);
+      font-weight: 800;
+    }
+
+    .hero-cta{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    /* ===== Sections ===== */
+    .section{
+      margin-top: 14px;
+      display:grid;
+      gap: 12px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 920px){
+      .grid-3{ grid-template-columns: 1fr; }
+    }
+
+    .glass{
+      position:relative;
+      border-radius: 22px;
+      padding: 16px;
+
+      background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 22px 70px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.16);
+
+      backdrop-filter: blur(var(--blur)) saturate(var(--sat));
+      -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--sat));
+
+      overflow:hidden;
+      isolation:isolate;
+      contain: paint;
+    }
+
+    .glass::after{
+      content:"";
+      position:absolute; inset:0;
+      border-radius: inherit;
+      background:
+        radial-gradient(220px 160px at 20% 18%, rgba(255,255,255,.22), transparent 62%),
+        linear-gradient(115deg, rgba(255,255,255,.10), rgba(255,255,255,0) 42%),
+        linear-gradient(25deg, rgba(228,2,26,.10), rgba(255,255,255,0) 60%);
+      opacity:.70;
+      mix-blend-mode: screen;
+      pointer-events:none;
+      clip-path: inset(0 round 22px);
+    }
+
+    .h2{
+      margin:0;
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing:.2px;
+    }
+    .p{
+      margin: 8px 0 0;
+      color: rgba(255,255,255,.76);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .list{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: rgba(255,255,255,.80);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .list li{ margin: 6px 0; }
+
+    .divider{
+      height: 1px;
+      background: rgba(255,255,255,.14);
+      margin: 12px 0;
+    }
+
+    /* ===== FAQ accordion (agora também usado para PC specs) ===== */
+    .faq{
+      display:grid;
+      gap: 10px;
+    }
+    details{
+      border-radius: 18px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+      overflow:hidden;
+      transition: background .2s ease;
+    }
+    details:hover{
+      background: rgba(0,0,0,.28);
+    }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 14px 14px;
+      font-weight: 900;
+      font-size: 13px;
+      color: rgba(255,255,255,.90);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      transition: background .2s ease;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    summary .hint{
+      color: rgba(255,255,255,.55);
+      font-weight: 800;
+      font-size: 12px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    summary .hint svg{
+      width: 16px;
+      height: 16px;
+      stroke: rgba(255,255,255,.55);
+      stroke-width: 2.5;
+      transition: transform .25s ease;
+    }
+    details[open] summary{
+      background: rgba(255,255,255,.06);
+    }
+    details[open] summary .hint svg{
+      transform: rotate(180deg);
+    }
+    .answer{
+      padding: 0 14px 14px;
+      color: rgba(255,255,255,.75);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* ===== Table (PC specs) ===== */
+    .table{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.20);
+      margin-top: 4px;
+    }
+    .table th, .table td{
+      padding: 12px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      text-align:left;
+    }
+    .table th{
+      font-weight: 950;
+      color: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.06);
+    }
+    .table td{
+      color: rgba(255,255,255,.74);
+    }
+    .table td:first-child{
+      font-weight: 800;
+      color: rgba(255,255,255,.85);
+    }
+    .table tr:last-child td{ border-bottom: 0; }
+
+    /* ===== Footer ===== */
+    footer{
+      margin-top: 14px;
+      padding: 12px 8px 2px;
+      text-align:center;
+      color: rgba(255,255,255,.52);
+      font-size: 12px;
+      position:relative;
+      z-index:1;
+    }
+
+    /* ===== Responsive small ===== */
+    @media (max-width: 520px){
+      .shell{ padding: 14px; border-radius: 34px; }
+      .hero{ border-radius: 24px; }
+      .hero-content{ padding: 18px 14px 14px; }
+      .chip{ width: 100%; justify-content:space-between; }
+      .btn{ width: 100%; text-align:center; }
+      .actions{ width: 100%; }
+      
+      .topbar .actions{
+        width: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .topbar .actions .btn{
+        width: auto;
+        display: inline-flex;
+        white-space: nowrap;
+        padding: 8px 10px;
+        font-size: 11px;
+      }
+
+      .topbar .actions .btn-primary{
+        padding: 8px 12px;
+      }
+      
+      .table th, .table td{
+        padding: 10px 8px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+  <div class="shards"></div>
+  <div class="grain"></div>
+
+  <main class="wrap">
+    <section class="shell" aria-label="Landing page Corujão - Santos Games Arena">
+
+      <!-- Topbar -->
+      <div class="topbar">
+        <div class="brand">
+          <div class="brand-badge" aria-label="Logo Santos Games Arena">
+            <img src="./image/logo-sg.png" alt="Santos Games Arena">
+          </div>
+          <div class="brand-text">
+            <div class="name">SGA</div>
+            <div class="sub">Lan House</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a class="btn" href="./index.html">Voltar</a>
+          <a class="btn btn-primary"
+             href="https://wa.me/5516992070533?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20com%20algumas%20informa%C3%A7%C3%B5es"
+             target="_blank" rel="noopener noreferrer">
+            Suporte no WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <section class="hero" aria-label="Apresentação do Corujão">
+        <div class="hero-bg" style="background-image:url('./image/banners/corujao.png')"></div>
+        <div class="hero-scrim"></div>
+
+        <div class="hero-content">
+          <div class="kicker"><span class="dot"></span> Próximo corujão → 16/01/2027</div>
+          <h1 class="hero-title">Tudo que você precisa saber antes de vir:</h1>
+          <p class="hero-sub">
+            Horário, preço, regras, o que pode trazer, estrutura dos PCs e dúvidas mais comuns.
+          </p>
+
+          <div class="hero-chips">
+            <div class="chip"><span> ⏰ Horário →</span> 21:00 ~ 08:00</div>
+            <!-- <div class="chip"><span> 💰 Preço →</span> R$ 99,90</div> -->
+            <div class="chip"><span> 🎧 Periféricos →</span> Pode trazer</div>
+          </div>
+
+          <div class="hero-cta">
+            <a class="btn btn-primary"
+               href="https://wa.me/5516992070533?text=Ol%C3%A1%2C%20quero%20reservar%20minha%20vaga%20no%20Coruj%C3%A3o%20e%20preciso%20de%20informa%C3%A7%C3%B5es"
+               target="_blank" rel="noopener noreferrer">
+              Reservar vaga pelo WhatsApp
+            </a>
+            <a class="btn" href="#faq" data-scroll="faq">Ver dúvidas frequentes</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 1: Resumo rápido -->
+      <div class="section grid-3">
+        <section class="glass">
+          <h2 class="h2">Como funciona</h2>
+          <p class="p">
+            O Corujão é uma sessão noturna pra você jogar a madrugada toda com estrutura premium.
+            Chegou, escolheu seu PC, plugou seus periféricos (se quiser) e é gameplay.
+          </p>
+          <div class="divider"></div>
+          <ul class="list">
+            <li>Entrada com check-in rápido</li>
+            <li>Ambiente climatizado e organizado</li>
+            <li>Suporte da equipe durante o evento</li>
+          </ul>
+        </section>
+
+        <section class="glass">
+          <h2 class="h2">Regras principais</h2>
+          <ul class="list">
+            <li><b>Periféricos:</b> pode trazer (mouse/teclado/headset).</li>
+            <li><b>Comida:</b> (defina aqui) pode / não pode trazer.</li>
+            <li><b>Idade:</b> (defina aqui) + autorização se for menor.</li>
+            <li><b>Conduta:</b> respeito ao espaço e aos demais.</li>
+          </ul>
+          <div class="divider"></div>
+          <p class="p">Se tiver qualquer dúvida diferente, chama no WhatsApp e a gente resolve rapidinho.</p>
+        </section>
+
+        <section class="glass">
+          <h2 class="h2">O que levar</h2>
+          <ul class="list">
+            <li>Documento (se necessário)</li>
+            <li>Seus periféricos (opcional)</li>
+            <li>Conta do jogo (Steam/Riot/etc)</li>
+            <li>Carregador do celular</li>
+          </ul>
+          <div class="divider"></div>
+          <p class="p"><b>Dica:</b> se você usa sensibilidade/config específica, já deixa anotado pra configurar rápido.</p>
+        </section>
+      </div>
+
+      <!-- SEÇÃO 2: Preço e horários -->
+      <div class="section">
+        <section class="glass">
+          <h2 class="h2">Horários e valores</h2>
+          <div class="divider"></div>
+          <ul class="list">
+            <li><b>Início:</b> 21:00</li>
+            <li><b>Término:</b> 08:00</li>
+            <li><b>Preço:</b> R$ 99,90</li>
+            <li><b>Vagas:</b> 10 <br> → pra garantir sua vaga somente reservando</li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- SEÇÃO 3: Config dos PCs (AGORA EXPANSÍVEL) -->
+      <div class="section">
+        <section class="glass">
+          <h2 class="h2">Configurações dos PCs</h2>
+          <p class="p">Veja abaixo as especificações completas dos equipamentos</p>
+
+          <div class="divider"></div>
+
+          <div class="faq">
+            <details>
+              <summary>
+                <span>Ver especificações técnicas</span>
+                <span class="hint">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="answer">
+                <table class="table" aria-label="Configuração dos computadores">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Especificação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Processador</td>
+                      <td>i5-13600K (13ª Geração)<br>14 núcleos / 20 threads / 3.50 GHz</td>
+                    </tr>
+                    <tr>
+                      <td>Placa de vídeo</td>
+                      <td>NVIDIA GeForce RTX 3060 Ti 8GB</td>
+                    </tr>
+                    <tr>
+                      <td>Memória RAM</td>
+                      <td>HyperX Fury 16GB DDR4 3200MHz (2×8GB Dual Channel)</td>
+                    </tr>
+                    <tr>
+                      <td>Monitor</td>
+                      <td>Monitor UltraGear 27" Full HD, 144Hz, 1ms, IPS, Cabo Displayport, HDR, FreeSync Premium</td>
+                    </tr>
+                    <tr>
+                      <td>Periféricos</td>
+                      <td>Teclado, mouse e headset da Redragon, com mousepad estendido Husky.</td>
+                    </tr>
+                    <tr>
+                      <td>Internet</td>
+                      <td>800 Mega, sem lag, sem quedas, sem dor de cabeça.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          </div>
+        </section>
+      </div>
+
+      <!-- FAQ -->
+      <div class="section">
+        <section class="glass" id="faq">
+          <h2 class="h2">Dúvidas frequentes</h2>
+          <p class="p">As perguntas que o pessoal sempre faz — já deixa tudo redondo e evita atendimento repetido.</p>
+
+          <div class="divider"></div>
+
+          <div class="faq">
+            <details>
+              <summary>
+                <span>Posso levar meu mouse/teclado/headset?</span>
+                <span class="hint">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="answer">
+                Sim. Você pode trazer seus periféricos. Se preferir, pode usar os disponíveis na arena.
+              </div>
+            </details>
+
+            <details>
+              <summary>
+                <span>Pode levar comida/bebida?</span>
+                <span class="hint">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="answer">
+                Pode / não pode. Se tiver lanchonete no local, explique como funciona.
+              </div>
+            </details>
+
+            <details>
+              <summary>
+                <span>Tem idade mínima?</span>
+                <span class="hint">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="answer">
+                Não. livre para todas a idades.
+              </div>
+            </details>
+
+            <details>
+              <summary>
+                <span>Precisa reservar vaga?</span>
+                <span class="hint">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="answer">
+                Recomendado. As vagas são limitadas e quem reserva tem prioridade no check-in.
+              </div>
+            </details>
+
+            <details>
+              <summary>
+                <span>Quais jogos rolam no Corujão?</span>
+                <span class="hint">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="answer">
+                Valorant, CS2, Fortnite, LoL e etc. Se tem não tiver o jogo que deseja, pode baixar.
+              </div>
+            </details>
+
+            <details>
+              <summary>
+                <span>Como pago?</span>
+                <span class="hint">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="answer">
+                Pix, cartão de crédito/débito e dinheiro em espécie.
+              </div>
+            </details>
+          </div>
+
+          <div class="divider"></div>
+
+          <a class="btn btn-primary"
+             href="https://wa.me/5516992070533?text=Ol%C3%A1%2C%20quero%20tirar%20uma%20d%C3%BAvida%20sobre%20o%20Coruj%C3%A3o"
+             target="_blank" rel="noopener noreferrer">
+            Tire dúvidas no WhatsApp
+          </a>
+        </section>
+      </div>
+
+      <footer>
+        © <span id="year"></span> Santos Games Arena • Ribeirão Preto - SP
+      </footer>
+
+    </section>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Scroll suave para âncoras
+    document.querySelectorAll('[data-scroll]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const id = btn.getAttribute('data-scroll');
+        const target = document.getElementById(id);
+        if (!target) return;
+        const yOffset = -20;
+        const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html
