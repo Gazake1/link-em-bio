@@ -2,7 +2,7 @@ let usuariosCache = [];
 
 async function carregarUsuarios() {
   const token = localStorage.getItem("token");
-  if (!token) return window.location.href = "/login";
+  if (!token) return window.location.href = "/login.html";
 
   const res = await fetch("/api/admin/users", {
     headers: { Authorization: `Bearer ${token}` }
@@ -10,7 +10,7 @@ async function carregarUsuarios() {
 
   if (!res.ok) {
     localStorage.removeItem("token");
-    return window.location.href = "/login";
+    return window.location.href = "/login.html";
   }
 
   const data = await res.json();
@@ -99,7 +99,7 @@ function formatarData(data) {
 
 function logout() {
   localStorage.removeItem("token");
-  window.location.href = "/login";
+  window.location.href = "/login.html";
 }
 
 carregarUsuarios();
