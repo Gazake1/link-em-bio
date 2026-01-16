@@ -13,17 +13,23 @@ router.post("/", async (req, res) => {
 
   // valida campos obrigatórios
   if (!nome || !cpf || !email || !data_nascimento) {
-    return res.status(400).json({ error: "Dados incompletos" });
+    return res.status(400).json({
+      error: "Dados obrigatórios não informados",
+    });
   }
 
   // valida CPF
   if (!validateCpf(cpf)) {
-    return res.status(400).json({ error: "CPF inválido" });
+    return res.status(400).json({
+      error: "CPF inválido",
+    });
   }
 
   // valida email
   if (!validateEmail(email)) {
-    return res.status(400).json({ error: "Email inválido" });
+    return res.status(400).json({
+      error: "Email inválido",
+    });
   }
 
   try {
@@ -38,26 +44,30 @@ router.post("/", async (req, res) => {
       VALUES ($1, $2, $3, $4, $5)
       RETURNING
         id,
-        nome,
-        cpf,
-        telefone,
-        email,
-        data_nascimento,
         criado_em;
     `;
 
     const values = [
-      nome,
+      nome.trim(),
       cpf.replace(/\D/g, ""),
       telefone || null,
-      email.toLowerCase(),
+      email.toLowerCase().trim(),
       data_nascimento,
     ];
 
     const result = await pool.query(query, values);
 
-    return res.status(201).json(result.rows[0]);
+    return res.status(201).json({
+      id: result.rows[0].id,
+      nome,
+      cpf,
+      telefone,
+      email,
+      data_nascimento,
+      criado_em: result.rows[0].criado_em,
+    });
   } catch (error) {
+    // CPF ou email duplicado
     if (error.code === "23505") {
       return res.status(409).json({
         error: "CPF ou email já cadastrado",
@@ -91,7 +101,7 @@ router.get("/", async (req, res) => {
 
     const result = await pool.query(query);
 
-    return res.json(result.rows);
+    return res.status(200).json(result.rows);
   } catch (error) {
     console.error("Erro ao listar usuários:", error);
     return res.status(500).json({
