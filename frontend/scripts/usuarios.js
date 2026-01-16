@@ -1,40 +1,44 @@
 async function carregarUsuarios() {
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-    if (!token) {
-        window.location.href = "/login";
-        return;
+  if (!token) {
+    window.location.href = "/login";
+    return;
+  }
+
+  const res = await fetch("/api/admin/users", {
+    headers: {
+      Authorization: `Bearer ${token}`
     }
+  });
 
-    const res = await fetch("/api/admin/users", {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
+  if (!res.ok) {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+    return;
+  }
 
-    if (!res.ok) {
-        localStorage.removeItem("token");
-        window.location.href = "/login";
-        return;
-    }
+  const users = await res.json();
 
-    const users = await res.json();
+  document.getElementById("total").innerText = users.length;
 
-    document.getElementById("total").innerText = users.length;
+  const tbody = document.getElementById("lista");
+  tbody.innerHTML = "";
 
-    const tbody = document.getElementById("lista");
-    tbody.innerHTML = "";
+  users.forEach(user => {
+    const tr = document.createElement("tr");
 
-    users.forEach(user => {
-        const tr = document.createElement("tr");
-
-        tr.innerHTML = `
+    tr.innerHTML = `
       <td>${user.id}</td>
       <td>${user.nome}</td>
       <td>${formatarData(user.data_nascimento)}</td>
-      <td>${user.telefone}</td>
+      <td>${user.telefone ?? "-"}</td>
       <td>${user.email}</td>
       <td>${user.cpf}</td>
+      <td>${user.frequencia}</td>
+      <td>${user.rank}</td>
+      <td>${user.status}</td>
+      <td>${formatarDataHora(user.ultima_visita)}</td>
       <td>
         <div class="actions-btns">
           <button class="edit">Editar</button>
@@ -43,17 +47,23 @@ async function carregarUsuarios() {
       </td>
     `;
 
-        tbody.appendChild(tr);
-    });
+    tbody.appendChild(tr);
+  });
 }
 
 function formatarData(data) {
-    return new Date(data).toLocaleDateString("pt-BR");
+  if (!data) return "-";
+  return new Date(data).toLocaleDateString("pt-BR");
+}
+
+function formatarDataHora(data) {
+  if (!data) return "Nunca";
+  return new Date(data).toLocaleString("pt-BR");
 }
 
 function logout() {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
+  localStorage.removeItem("token");
+  window.location.href = "/login";
 }
 
 carregarUsuarios();

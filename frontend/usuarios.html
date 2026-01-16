@@ -1,45 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Dashboard Administrativo</title>
-  <link rel="stylesheet" href="./styles/dashboard.css" />
+    <meta charset="UTF-8" />
+    <title>Dashboard Administrativo</title>
+    <link rel="stylesheet" href="./styles/dashboard.css" />
 </head>
+
 <body>
 
-  <!-- ===== Header ===== -->
-  <header class="topbar">
-    <div class="title">
-      📊 <span>Dashboard Administrativo</span>
-    </div>
+    <!-- ===== Header ===== -->
+    <header class="topbar">
+        <div class="title">
+            📊 <span>Dashboard Administrativo</span>
+        </div>
 
-    <div class="actions">
-      <button class="btn logout" onclick="logout()">Sair</button>
-      <a href="painel-adm.santos-tech/dasboard.com" class="btn home">Voltar para o Home</a>
-    </div>
-  </header>
+        <div class="actions">
+            <button class="btn logout" onclick="logout()">Sair</button>
+            <a href="painel-adm.santos-tech/dasboard.com" class="btn home">Voltar para o Home</a>
+        </div>
+    </header>
 
-  <!-- ===== Conteúdo ===== -->
-  <main class="container">
-    <h2>Total de alunos: <span id="total">0</span></h2>
+    <!-- ===== Conteúdo ===== -->
+    <main class="container">
+        <h2>Total de alunos: <span id="total">0</span></h2>
 
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nome</th>
-          <th>Data Nasc.</th>
-          <th>WhatsApp</th>
-          <th>Email</th>
-          <th>CPF</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Nascimento</th>
+                    <th>Telefone</th>
+                    <th>Email</th>
+                    <th>CPF</th>
+                    <th>Frequência</th>
+                    <th>Rank</th>
+                    <th>Status</th>
+                    <th>Última visita</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
 
-      <tbody id="lista"></tbody>
-    </table>
-  </main>
+            <tbody id="lista"></tbody>
+        </table>
+    </main>
 
-  <script src="./scripts/usuarios.js"></script>
+    <script src="./scripts/usuarios.js"></script>
 </body>
+
 </html>

@@ -6,7 +6,7 @@
 }
 
 body {
-  background: #fff;
+  background: #ffffffa1;
   color: #000;
 }
 
@@ -61,6 +61,7 @@ h2 {
 table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 14px;
 }
 
 thead {
@@ -69,33 +70,52 @@ thead {
 }
 
 th, td {
-  padding: 12px;
-  border: 1px solid #333;
-  text-align: left;
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
 }
 
 tbody tr {
-  background: #000;
+  background: #111;
   color: #fff;
 }
 
+tbody tr:nth-child(even) {
+  background: #1a1a1a;
+}
+
+/* ===== Destaques ===== */
+td:nth-child(8) { /* Rank */
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+td:nth-child(9) { /* Status */
+  font-weight: bold;
+  color: #00e600;
+}
+
+/* ===== Botões ===== */
 .actions-btns {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  justify-content: center;
 }
 
 .edit {
   background: #000;
   color: #fff;
   border: 2px solid red;
-  padding: 6px 10px;
+  padding: 5px 10px;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 .delete {
   background: red;
   color: #fff;
   border: none;
-  padding: 6px 10px;
+  padding: 5px 10px;
   border-radius: 6px;
+  cursor: pointer;
 }
