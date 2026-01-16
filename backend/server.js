@@ -7,29 +7,40 @@ import usersRoutes from "./routes/users.routes.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ===== dirname (ESM) =====
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// ===== Frontend =====
 const frontendPath = path.resolve(__dirname, "frontend");
 
 // ===== Middlewares =====
 app.use(express.json());
 app.use(express.static(frontendPath));
 
-// ===== API (SEMPRE PRIMEIRO) =====
+// ===== API (PRIMEIRO, SEMPRE) =====
 app.use("/api/users", usersRoutes);
 
-// ===== Home =====
+// rota base da API (opcional, mas recomendado)
 app.get("/api", (req, res) => {
-  res.sendFile(path.join(frontendPath, "api.html"));
+  res.json({ status: "API online" });
 });
 
-// ===== Frontend pages (bloqueando /api) =====
+// ===== Home =====
+app.get("/", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
+
+// ===== Frontend pages (BLOQUEANDO /api) =====
 app.get("/:page", (req, res) => {
   const page = req.params.page;
 
-  // bloqueia API e coisas estranhas
-  if (page === "api" || !/^[a-z0-9-]+$/i.test(page)) {
+  // bloqueia api, arquivos e caminhos inválidos
+  if (
+    page === "api" ||
+    page.includes(".") ||
+    !/^[a-z0-9-]+$/i.test(page)
+  ) {
     return res.status(404).end();
   }
 
@@ -42,6 +53,7 @@ app.get("/:page", (req, res) => {
   res.sendFile(filePath);
 });
 
+// ===== Start =====
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(`Servidor rodando em https://saiba.mais.santos-tech.com`);
 });
