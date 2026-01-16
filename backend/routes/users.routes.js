@@ -11,48 +11,52 @@ const router = Router();
 router.post("/", async (req, res) => {
   const { nome, cpf, telefone, email, data_nascimento } = req.body;
 
-  // campos obrigatórios
+  // valida campos obrigatórios
   if (!nome || !cpf || !email || !data_nascimento) {
     return res.status(400).json({ error: "Dados incompletos" });
   }
 
-  // valida CPF real
+  // valida CPF
   if (!validateCpf(cpf)) {
     return res.status(400).json({ error: "CPF inválido" });
   }
 
-  // valida email real
+  // valida email
   if (!validateEmail(email)) {
     return res.status(400).json({ error: "Email inválido" });
   }
 
   try {
     const query = `
-      INSERT INTO users
-        (nome, cpf, telefone, email, data_nascimento)
-      VALUES
-        ($1, $2, $3, $4, $5)
-      RETURNING id
+      INSERT INTO users (
+        nome,
+        cpf,
+        telefone,
+        email,
+        data_nascimento
+      )
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING
+        id,
+        nome,
+        cpf,
+        telefone,
+        email,
+        data_nascimento,
+        criado_em;
     `;
 
     const values = [
       nome,
-      cpf.replace(/\D/g, ""), // salva sem máscara
-      telefone,
-      email.toLowerCase(),    // padroniza email
+      cpf.replace(/\D/g, ""),
+      telefone || null,
+      email.toLowerCase(),
       data_nascimento,
     ];
 
     const result = await pool.query(query, values);
 
-    return res.status(201).json({
-      id: result.rows[0].id,
-      nome,
-      cpf,
-      telefone,
-      email,
-      data_nascimento,
-    });
+    return res.status(201).json(result.rows[0]);
   } catch (error) {
     if (error.code === "23505") {
       return res.status(409).json({
@@ -60,7 +64,7 @@ router.post("/", async (req, res) => {
       });
     }
 
-    console.error(error);
+    console.error("Erro ao criar usuário:", error);
     return res.status(500).json({
       error: "Erro interno do servidor",
     });
@@ -72,15 +76,24 @@ router.post("/", async (req, res) => {
 ========================= */
 router.get("/", async (req, res) => {
   try {
-    const result = await pool.query(
-      `SELECT id, nome, cpf, telefone, email, data_nascimento, criado_em
-       FROM users
-       ORDER BY criado_em DESC`
-    );
+    const query = `
+      SELECT
+        id,
+        nome,
+        cpf,
+        telefone,
+        email,
+        data_nascimento,
+        criado_em
+      FROM users
+      ORDER BY criado_em DESC;
+    `;
+
+    const result = await pool.query(query);
 
     return res.json(result.rows);
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao listar usuários:", error);
     return res.status(500).json({
       error: "Erro ao listar usuários",
     });
