@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { db } from "../database/db.js";
 import { validateCpf } from "../utils/validateCpf.js";
-import { validateEmail } from "../utils/validateEmail.js";
+import { validateEmail } from "../utils/valideEmail.js";
 
 const router = Router();
 
