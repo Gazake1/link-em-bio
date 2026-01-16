@@ -12,7 +12,7 @@ form.addEventListener("submit", async (event) => {
   const data_nascimento = document.getElementById("data").value;
 
   try {
-    const response = await fetch("https://saiba-mais.santos-games.com/api", {
+    const response = await fetch("https://saiba-mais.santos-games.com/api/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
