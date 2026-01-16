@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import usersRoutes from "./routes/users.routes.js";
 import authRoutes from "./routes/auth.routes.js"
+import adminUsersRoutes from "./routes/admin.users.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,6 +22,7 @@ app.use(express.static(frontendPath));
 
 // ===== API (PRIMEIRO, SEMPRE) =====
 app.use("/api/users", usersRoutes);
+app.use("/api/admin/users", adminUsersRoutes);
 
 // rota base da API (opcional, mas recomendado)
 app.get("/api", (req, res) => {

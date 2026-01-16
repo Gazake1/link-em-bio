@@ -1,34 +1,34 @@
 async function carregarUsuarios() {
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  if (!token) {
-    window.location.href = "/login";
-    return;
-  }
-
-  const res = await fetch("/api/users", {
-    headers: {
-      Authorization: `Bearer ${token}`
+    if (!token) {
+        window.location.href = "/login";
+        return;
     }
-  });
 
-  if (!res.ok) {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-    return;
-  }
+    const res = await fetch("/api/admin/users", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
 
-  const users = await res.json();
+    if (!res.ok) {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+        return;
+    }
 
-  document.getElementById("total").innerText = users.length;
+    const users = await res.json();
 
-  const tbody = document.getElementById("lista");
-  tbody.innerHTML = "";
+    document.getElementById("total").innerText = users.length;
 
-  users.forEach(user => {
-    const tr = document.createElement("tr");
+    const tbody = document.getElementById("lista");
+    tbody.innerHTML = "";
 
-    tr.innerHTML = `
+    users.forEach(user => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
       <td>${user.id}</td>
       <td>${user.nome}</td>
       <td>${formatarData(user.data_nascimento)}</td>
@@ -43,17 +43,17 @@ async function carregarUsuarios() {
       </td>
     `;
 
-    tbody.appendChild(tr);
-  });
+        tbody.appendChild(tr);
+    });
 }
 
 function formatarData(data) {
-  return new Date(data).toLocaleDateString("pt-BR");
+    return new Date(data).toLocaleDateString("pt-BR");
 }
 
 function logout() {
-  localStorage.removeItem("token");
-  window.location.href = "/login";
+    localStorage.removeItem("token");
+    window.location.href = "/login";
 }
 
 carregarUsuarios();

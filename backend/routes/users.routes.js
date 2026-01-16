@@ -2,42 +2,69 @@ import { Router } from "express";
 import { pool } from "../database/db.js";
 import { validateCpf } from "../utils/validateCpf.js";
 import { validateEmail } from "../utils/valideEmail.js";
-import { authenticateToken } from "../middlewares/auth.middlewares.js"; // <- middleware JWT
 
 const router = Router();
 
 /* =========================
    Criar usuário
 ========================= */
-router.post("/", authenticateToken, async (req, res) => {
-  const { nome, cpf, telefone, email, data_nascimento } = req.body;
+router.post("/", async (req, res) => {
+  const {
+    nome,
+    cpf,
+    telefone,
+    email,
+    data_nascimento
+  } = req.body;
 
   // valida campos obrigatórios
   if (!nome || !cpf || !email || !data_nascimento) {
-    return res.status(400).json({ error: "Dados obrigatórios não informados" });
+    return res.status(400).json({
+      error: "Dados obrigatórios não informados",
+    });
   }
 
   // valida CPF
   if (!validateCpf(cpf)) {
-    return res.status(400).json({ error: "CPF inválido" });
+    return res.status(400).json({
+      error: "CPF inválido",
+    });
   }
 
   // valida email
   if (!validateEmail(email)) {
-    return res.status(400).json({ error: "Email inválido" });
+    return res.status(400).json({
+      error: "Email inválido",
+    });
   }
 
   try {
     const query = `
-      INSERT INTO public.users (
+      INSERT INTO users (
         nome,
         cpf,
         telefone,
         email,
-        data_nascimento
+        data_nascimento,
+        ultima_visita,
+        frequencia,
+        status_cliente,
+        rank
       )
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING id, criado_em;
+      VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        NULL,
+        0,
+        'never_visited',
+        'Rank bronze'
+      )
+      RETURNING
+        id,
+        criado_em;
     `;
 
     const values = [
@@ -57,43 +84,23 @@ router.post("/", authenticateToken, async (req, res) => {
       telefone,
       email,
       data_nascimento,
+      ultima_visita: null,
+      frequencia: 0,
+      status_cliente: "never_visited",
+      rank: 0,
       criado_em: result.rows[0].criado_em,
     });
   } catch (error) {
-    // CPF ou email duplicado
     if (error.code === "23505") {
-      return res.status(409).json({ error: "CPF ou email já cadastrado" });
+      return res.status(409).json({
+        error: "CPF ou email já cadastrado",
+      });
     }
 
     console.error("Erro ao criar usuário:", error);
-    return res.status(500).json({ error: "Erro interno do servidor" });
-  }
-});
-
-/* =========================
-   Listar usuários
-========================= */
-router.get("/", authenticateToken, async (req, res) => {
-  try {
-    const query = `
-      SELECT
-        id,
-        nome,
-        cpf,
-        telefone,
-        email,
-        data_nascimento,
-        criado_em
-      FROM public.users
-      ORDER BY criado_em DESC;
-    `;
-
-    const result = await pool.query(query);
-
-    return res.status(200).json(result.rows);
-  } catch (error) {
-    console.error("Erro ao listar usuários:", error);
-    return res.status(500).json({ error: "Erro ao listar usuários" });
+    return res.status(500).json({
+      error: "Erro interno do servidor",
+    });
   }
 });
 
