@@ -5,14 +5,14 @@ let resposta = document.getElementById("mensagem")
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const nome = document.getElementById("nome").value;
-  const cpf = document.getElementById("cpf").value;
-  const telefone = document.getElementById("telefone").value;
+  const nome = document.getElementById("nome").value.trim();
+  const cpf = document.getElementById("cpf").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
   const email = document.getElementById("email").value;
-  const data_nascimento = document.getElementById("data").value;
+  const data_nascimento = document.getElementById("data").value.trim();
 
   try {
-    const response = await fetch("https://saiba-mais.santos-games.com/api", {
+    const response = await fetch("/api/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -29,11 +29,11 @@ form.addEventListener("submit", async (event) => {
     const data = await response.json();
 
     if (!response.ok) {
-      respota.textContent = (data.error || "Erro ao cadastrar");
+      resposta.textContent = (data.error || "Erro ao cadastrar");
       return;
     }
 
-    respota.textContent = ("Cadastro realizado com sucesso!");
+    resposta.textContent = ("Cadastro realizado com sucesso!");
     form.reset();
   } catch (error) {
     console.error(error);

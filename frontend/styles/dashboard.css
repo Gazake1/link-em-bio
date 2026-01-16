@@ -1,0 +1,163 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #ffffffa1;
+  color: #000;
+}
+
+/* ===== Header ===== */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logout {
+  background: red;
+  color: #fff;
+}
+
+.home {
+  background: #00e600;
+  color: #000;
+}
+
+/* ===== Conteúdo ===== */
+.container {
+  padding: 20px 40px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* ===== Tabela ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead {
+  background: red;
+  color: #fff;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+tbody tr {
+  background: #111;
+  color: #fff;
+}
+
+tbody tr:nth-child(even) {
+  background: #1a1a1a;
+}
+
+/* ===== Destaques ===== */
+td:nth-child(8) { /* Rank */
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+td:nth-child(9) { /* Status */
+  font-weight: bold;
+  color: #00e600;
+}
+
+/* ===== Botões ===== */
+.actions-btns {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.edit {
+  background: #000;
+  color: #fff;
+  border: 2px solid red;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete {
+  background: red;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ===== Modal ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #fff;
+  color: #000;
+  padding: 20px;
+  width: 500px;
+  border-radius: 10px;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}

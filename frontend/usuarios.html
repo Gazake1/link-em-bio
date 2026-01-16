@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard Administrativo</title>
+  <link rel="stylesheet" href="./styles/dashboard.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="title">📊 <span>Dashboard Administrativo</span></div>
+  <div class="actions">
+    <button class="btn logout" onclick="logout()">Sair</button>
+    <a href="/" class="btn home">Voltar para o Home</a>
+  </div>
+</header>
+
+<main class="container">
+  <h2>Total de alunos: <span id="total">0</span></h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Nascimento</th>
+        <th>Telefone</th>
+        <th>Email</th>
+        <th>CPF</th>
+        <th>Frequência</th>
+        <th>Rank</th>
+        <th>Status</th>
+        <th>Última visita</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="lista"></tbody>
+  </table>
+</main>
+
+<!-- ===== MODAL ===== -->
+<div id="modalEditar" class="modal hidden">
+  <div class="modal-content">
+    <h3>Editar usuário</h3>
+
+    <input type="hidden" id="edit-id">
+
+    <label>Nome</label>
+    <input id="edit-nome">
+
+    <label>Email</label>
+    <input id="edit-email">
+
+    <label>Telefone</label>
+    <input id="edit-telefone">
+
+    <label>Data de nascimento</label>
+    <input type="date" id="edit-nascimento">
+
+    <label>Frequência</label>
+    <input type="number" id="edit-frequencia">
+
+    <label>Status</label>
+    <select id="edit-status">
+      <option value="Ativo">Ativo</option>
+      <option value="Inativo">Inativo</option>
+    </select>
+
+    <label>Rank</label>
+    <select id="edit-rank">
+      <option value="Bronze">Bronze</option>
+      <option value="Prata">Prata</option>
+      <option value="Ouro">Ouro</option>
+    </select>
+
+    <label>Última visita</label>
+    <input type="date" id="edit-ultima_visita">
+
+    <div class="modal-actions">
+      <button class="btn edit" onclick="salvarEdicao()">Salvar</button>
+      <button class="btn delete" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="./scripts/usuarios.js"></script>
+</body>
+</html>

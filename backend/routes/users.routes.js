@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { db } from "../database/db.js";
+import { pool } from "../database/db.js";
 import { validateCpf } from "../utils/validateCpf.js";
-import { validateEmail } from "../utils/validateEmail.js";
+import { validateEmail } from "../utils/valideEmail.js";
 
 const router = Router();
 
@@ -9,41 +9,73 @@ const router = Router();
    Criar usuário
 ========================= */
 router.post("/", async (req, res) => {
-  const { nome, cpf, telefone, email, data_nascimento } = req.body;
+  const {
+    nome,
+    cpf,
+    telefone,
+    email,
+    data_nascimento
+  } = req.body;
 
-  // campos obrigatórios
+  // valida campos obrigatórios
   if (!nome || !cpf || !email || !data_nascimento) {
-    return res.status(400).json({ error: "Dados incompletos" });
+    return res.status(400).json({
+      error: "Dados obrigatórios não informados",
+    });
   }
 
-  // valida CPF real
+  // valida CPF
   if (!validateCpf(cpf)) {
-    return res.status(400).json({ error: "CPF inválido" });
+    return res.status(400).json({
+      error: "CPF inválido",
+    });
   }
 
-  // valida email real
+  // valida email
   if (!validateEmail(email)) {
-    return res.status(400).json({ error: "Email inválido" });
+    return res.status(400).json({
+      error: "Email inválido",
+    });
   }
 
   try {
     const query = `
-      INSERT INTO users
-        (nome, cpf, telefone, email, data_nascimento)
-      VALUES
-        ($1, $2, $3, $4, $5)
-      RETURNING id
+      INSERT INTO users (
+        nome,
+        cpf,
+        telefone,
+        email,
+        data_nascimento,
+        ultima_visita,
+        frequencia,
+        status_cliente,
+        rank
+      )
+      VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        NULL,
+        0,
+        'never_visited',
+        'Rank bronze'
+      )
+      RETURNING
+        id,
+        criado_em;
     `;
 
     const values = [
-      nome,
-      cpf.replace(/\D/g, ""), // salva sem máscara
-      telefone,
-      email.toLowerCase(),    // padroniza email
+      nome.trim(),
+      cpf.replace(/\D/g, ""),
+      telefone || null,
+      email.toLowerCase().trim(),
       data_nascimento,
     ];
 
-    const result = await db.query(query, values);
+    const result = await pool.query(query, values);
 
     return res.status(201).json({
       id: result.rows[0].id,
@@ -52,6 +84,11 @@ router.post("/", async (req, res) => {
       telefone,
       email,
       data_nascimento,
+      ultima_visita: null,
+      frequencia: 0,
+      status_cliente: "never_visited",
+      rank: 0,
+      criado_em: result.rows[0].criado_em,
     });
   } catch (error) {
     if (error.code === "23505") {
@@ -60,29 +97,9 @@ router.post("/", async (req, res) => {
       });
     }
 
-    console.error(error);
+    console.error("Erro ao criar usuário:", error);
     return res.status(500).json({
       error: "Erro interno do servidor",
-    });
-  }
-});
-
-/* =========================
-   Listar usuários
-========================= */
-router.get("/", async (req, res) => {
-  try {
-    const result = await db.query(
-      `SELECT id, nome, cpf, telefone, email, data_nascimento, criado_em
-       FROM users
-       ORDER BY criado_em DESC`
-    );
-
-    return res.json(result.rows);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      error: "Erro ao listar usuários",
     });
   }
 });
