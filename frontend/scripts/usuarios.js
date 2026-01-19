@@ -1,12 +1,22 @@
 let usuariosCache = [];
 let currentPage = 1;
 const limit = 10;
+
 let searchTerm = "";
 let filtroStatus = "";
 let filtroRank = "";
 
+/* =========================
+   CARREGAR USUÁRIOS
+========================= */
 async function carregarUsuarios(page = 1) {
   const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/login.html";
+    return;
+  }
+
+  currentPage = page;
 
   const params = new URLSearchParams({
     page,
@@ -16,23 +26,34 @@ async function carregarUsuarios(page = 1) {
     rank: filtroRank
   });
 
-  const res = await fetch(
-    `/api/admin/users?${params.toString()}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+  const res = await fetch(`/api/admin/users?${params.toString()}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
     }
-  );
+  });
+
+  if (!res.ok) {
+    console.error("Erro ao carregar usuários");
+    return;
+  }
 
   const data = await res.json();
 
+  usuariosCache = data.users; // 🔥 ESSENCIAL
   document.getElementById("total").textContent = data.total;
 
+  renderizarTabela(data.users);
+  criarPaginacao(data.totalPages, data.page);
+}
+
+/* =========================
+   RENDER TABELA
+========================= */
+function renderizarTabela(users) {
   const tbody = document.getElementById("lista");
   tbody.innerHTML = "";
 
-  data.users.forEach(user => {
+  users.forEach(user => {
     tbody.innerHTML += `
       <tr>
         <td>${user.id}</td>
@@ -53,98 +74,94 @@ async function carregarUsuarios(page = 1) {
       </tr>
     `;
   });
-
-  criarPaginacao(data.totalPages, data.page);
 }
 
+/* =========================
+   BUSCA
+========================= */
+function buscar(valor) {
+  searchTerm = valor;
+  carregarUsuarios(1);
+}
 
+/* =========================
+   FILTROS
+========================= */
+function filtrar() {
+  filtroStatus = document.getElementById("filter-status").value;
+  filtroRank = document.getElementById("filter-rank").value;
+  carregarUsuarios(1);
+}
+
+/* =========================
+   MODAL
+========================= */
 function abrirModal(id) {
-    const user = usuariosCache.find(u => u.id === id);
+  const user = usuariosCache.find(u => u.id === id);
+  if (!user) return;
 
-    document.getElementById("edit-id").value = user.id;
-    document.getElementById("edit-nome").value = user.nome;
-    document.getElementById("edit-email").value = user.email;
-    document.getElementById("edit-telefone").value = user.telefone || "";
-    document.getElementById("edit-nascimento").value = user.data_nascimento?.split("T")[0];
-    document.getElementById("edit-frequencia").value = user.frequencia || 0;
-    document.getElementById("edit-status").value = user.status_cliente;
-    document.getElementById("edit-rank").value = user.rank;
-    document.getElementById("edit-ultima_visita").value = user.ultima_visita?.split("T")[0] || "";
+  document.getElementById("edit-id").value = user.id;
+  document.getElementById("edit-nome").value = user.nome;
+  document.getElementById("edit-email").value = user.email;
+  document.getElementById("edit-telefone").value = user.telefone || "";
+  document.getElementById("edit-nascimento").value = user.data_nascimento?.split("T")[0];
+  document.getElementById("edit-frequencia").value = user.frequencia;
+  document.getElementById("edit-status").value = user.status_cliente;
+  document.getElementById("edit-rank").value = user.rank;
+  document.getElementById("edit-ultima_visita").value =
+    user.ultima_visita?.split("T")[0] || "";
 
-    document.getElementById("modalEditar").classList.remove("hidden");
+  document.getElementById("modalEditar").classList.remove("hidden");
 }
 
 function fecharModal() {
-    document.getElementById("modalEditar").classList.add("hidden");
+  document.getElementById("modalEditar").classList.add("hidden");
 }
 
+/* =========================
+   SALVAR EDIÇÃO
+========================= */
 async function salvarEdicao() {
-    const token = localStorage.getItem("token");
-    const id = document.getElementById("edit-id").value;
+  const token = localStorage.getItem("token");
+  const id = document.getElementById("edit-id").value;
 
-    const body = {
-        nome: document.getElementById("edit-nome").value,
-        email: document.getElementById("edit-email").value,
-        telefone: document.getElementById("edit-telefone").value,
-        data_nascimento: document.getElementById("edit-nascimento").value,
-        frequencia: Number(document.getElementById("edit-frequencia").value),
-        status_cliente: document.getElementById("edit-status").value, // ✅
-        rank: document.getElementById("edit-rank").value,
-        ultima_visita: document.getElementById("edit-ultima_visita").value || null
-    };
+  const body = {
+    nome: document.getElementById("edit-nome").value,
+    email: document.getElementById("edit-email").value,
+    telefone: document.getElementById("edit-telefone").value,
+    data_nascimento: document.getElementById("edit-nascimento").value,
+    frequencia: Number(document.getElementById("edit-frequencia").value),
+    status_cliente: document.getElementById("edit-status").value,
+    rank: document.getElementById("edit-rank").value,
+    ultima_visita: document.getElementById("edit-ultima_visita").value || null
+  };
 
-    await fetch(`/api/admin/users/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(body)
-    });
+  await fetch(`/api/admin/users/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(body)
+  });
 
-    fecharModal();
-    carregarUsuarios();
+  fecharModal();
+  carregarUsuarios(currentPage);
 }
 
-
+/* =========================
+   UTIL
+========================= */
 function formatarData(data) {
-    return new Date(data).toLocaleDateString("pt-BR");
+  return new Date(data).toLocaleDateString("pt-BR");
 }
 
 function logout() {
-    localStorage.removeItem("token");
-    window.location.href = "/login.html";
+  localStorage.removeItem("token");
+  window.location.href = "/login.html";
 }
 
-async function carregarUsuarios(page = 1) {
-  const params = new URLSearchParams();
-
-  const rank = document.getElementById("filter-rank").value;
-  const status = document.getElementById("filter-status").value;
-  const search = document.getElementById("filter-search").value;
-  const freq = document.getElementById("filter-freq").value;
-
-  if (rank) params.append("rank", rank);
-  if (status) params.append("status_cliente", status);
-  if (search) params.append("search", search);
-  if (freq) params.append("freq_min", freq);
-
-  params.append("page", page);
-  params.append("limit", 10);
-
-  const res = await fetch(`/api/admin/users?${params.toString()}`, {
-    credentials: "include"
-  });
-
-  const users = await res.json();
-  renderizarTabela(users);
-}
-
-function buscar(valor) {
-  searchTerm = valor;
-  currentPage = 1;
-  carregarUsuarios();
-}
-
-
+/* =========================
+   INIT
+========================= */
 carregarUsuarios();
