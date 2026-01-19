@@ -1,50 +1,62 @@
 let usuariosCache = [];
+let currentPage = 1;
+const limit = 10;
+let searchTerm = "";
+let filtroStatus = "";
+let filtroRank = "";
 
-async function carregarUsuarios() {
-    const token = localStorage.getItem("token");
-    if (!token) return window.location.href = "/login.html";
+async function carregarUsuarios(page = 1) {
+  const token = localStorage.getItem("token");
 
-    const res = await fetch("/api/admin/users", {
-        headers: { Authorization: `Bearer ${token}` }
-    });
+  const params = new URLSearchParams({
+    page,
+    limit,
+    search: searchTerm,
+    status: filtroStatus,
+    rank: filtroRank
+  });
 
-    if (res.status === 401 || res.status === 403) {
-        localStorage.removeItem("token");
-        window.location.href = "/login.html";
-        return;
+  const res = await fetch(
+    `/api/admin/users?${params.toString()}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     }
+  );
 
-    const data = await res.json();
-    const users = Array.isArray(data) ? data : data.users;
+  const data = await res.json();
 
-    usuariosCache = users;
-    document.getElementById("total").innerText = users.length;
+  document.getElementById("total").textContent = data.total;
 
-    const tbody = document.getElementById("lista");
-    tbody.innerHTML = "";
+  const tbody = document.getElementById("lista");
+  tbody.innerHTML = "";
 
-    users.forEach(user => {
-        const tr = document.createElement("tr");
-
-        tr.innerHTML = `
-      <td>${user.id}</td>
-      <td>${user.nome}</td>
-      <td>${formatarData(user.data_nascimento)}</td>
-      <td>${user.telefone || "-"}</td>
-      <td>${user.email}</td>
-      <td>${user.cpf}</td>
-      <td>${user.frequencia ?? 0}</td>
-      <td><span class="badge badge-${user.rank.toLowerCase()}">${user.rank}</span></td>
-      <td>${user.status_cliente}</td>
-      <td>${user.ultima_visita ? formatarData(user.ultima_visita) : "-"}</td>
-      <td>
-        <button class="edit" onclick="abrirModal(${user.id})">Editar</button>
-      </td>
+  data.users.forEach(user => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${user.id}</td>
+        <td>${user.nome}</td>
+        <td>${formatarData(user.data_nascimento)}</td>
+        <td>${user.telefone || "-"}</td>
+        <td>${user.email}</td>
+        <td>${user.cpf}</td>
+        <td>${user.frequencia}</td>
+        <td>${user.rank}</td>
+        <td>${user.status_cliente}</td>
+        <td>${user.ultima_visita ? formatarData(user.ultima_visita) : "-"}</td>
+        <td>
+          <button class="btn edit" onclick="abrirModal(${user.id})">
+            Editar
+          </button>
+        </td>
+      </tr>
     `;
+  });
 
-        tbody.appendChild(tr);
-    });
+  criarPaginacao(data.totalPages, data.page);
 }
+
 
 function abrirModal(id) {
     const user = usuariosCache.find(u => u.id === id);
@@ -103,5 +115,36 @@ function logout() {
     localStorage.removeItem("token");
     window.location.href = "/login.html";
 }
+
+async function carregarUsuarios(page = 1) {
+  const params = new URLSearchParams();
+
+  const rank = document.getElementById("filter-rank").value;
+  const status = document.getElementById("filter-status").value;
+  const search = document.getElementById("filter-search").value;
+  const freq = document.getElementById("filter-freq").value;
+
+  if (rank) params.append("rank", rank);
+  if (status) params.append("status_cliente", status);
+  if (search) params.append("search", search);
+  if (freq) params.append("freq_min", freq);
+
+  params.append("page", page);
+  params.append("limit", 10);
+
+  const res = await fetch(`/api/admin/users?${params.toString()}`, {
+    credentials: "include"
+  });
+
+  const users = await res.json();
+  renderizarTabela(users);
+}
+
+function buscar(valor) {
+  searchTerm = valor;
+  currentPage = 1;
+  carregarUsuarios();
+}
+
 
 carregarUsuarios();

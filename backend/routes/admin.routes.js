@@ -9,7 +9,60 @@ const router = Router();
 ========================= */
 router.get("/", authAdmin, async (req, res) => {
   try {
-    const { rows } = await pool.query(`
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+      status,
+      rank
+    } = req.query;
+
+    const offset = (page - 1) * limit;
+
+    let where = [];
+    let values = [];
+    let idx = 1;
+
+    // 🔍 BUSCA (nome, email ou CPF)
+    if (search) {
+      where.push(`
+        (
+          nome ILIKE $${idx}
+          OR email ILIKE $${idx}
+          OR cpf ILIKE $${idx}
+        )
+      `);
+      values.push(`%${search}%`);
+      idx++;
+    }
+
+    // 🟡 FILTRO STATUS
+    if (status) {
+      where.push(`status_cliente = $${idx}`);
+      values.push(status);
+      idx++;
+    }
+
+    // 🟣 FILTRO RANK
+    if (rank) {
+      where.push(`rank = $${idx}`);
+      values.push(rank);
+      idx++;
+    }
+
+    const whereSQL = where.length ? `WHERE ${where.join(" AND ")}` : "";
+
+    // 🔢 TOTAL
+    const totalResult = await pool.query(
+      `SELECT COUNT(*) FROM users ${whereSQL}`,
+      values
+    );
+
+    const total = Number(totalResult.rows[0].count);
+
+    // 📄 DADOS
+    const usersResult = await pool.query(
+      `
       SELECT
         id,
         nome,
@@ -20,18 +73,30 @@ router.get("/", authAdmin, async (req, res) => {
         frequencia,
         status_cliente,
         rank,
-        ultima_visita,
-        criado_em
+        ultima_visita
       FROM users
+      ${whereSQL}
       ORDER BY criado_em DESC
-    `);
+      LIMIT $${idx} OFFSET $${idx + 1}
+      `,
+      [...values, limit, offset]
+    );
 
-    res.json(rows);
+    res.json({
+      total,
+      page: Number(page),
+      totalPages: Math.ceil(total / limit),
+      users: usersResult.rows
+    });
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ "erro:": error });
+    res.status(500).json({ error: "Erro ao listar usuários" });
   }
 });
+
+
+
 
 /* =========================
    Atualizar usuário (admin)

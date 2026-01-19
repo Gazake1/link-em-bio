@@ -17,6 +17,27 @@
     </div>
   </header>
 
+  <div class="filters">
+    <input type="text" placeholder="Buscar por nome, email ou CPF" oninput="buscar(this.value)" />
+
+    <select id="filter-rank" onchange="carregarUsuarios()">
+      <option value="">Rank</option>
+      <option value="bronze">Bronze</option>
+      <option value="prata">Prata</option>
+      <option value="ouro">Ouro</option>
+    </select>
+
+    <select id="filter-status" onchange="carregarUsuarios()">
+      <option value="">Status</option>
+      <option value="ativo">Ativo</option>
+      <option value="inativo">Inativo</option>
+      <option value="never_visited">Nunca visitou</option>
+    </select>
+
+    <input type="number" id="filter-freq" placeholder="Freq mínima" onchange="carregarUsuarios()" />
+  </div>
+
+
   <main class="container">
     <h2>Total de alunos: <span id="total">0</span></h2>
 
@@ -38,7 +59,15 @@
       </thead>
       <tbody id="lista"></tbody>
     </table>
+
+    <div class="pagination">
+      <button onclick="carregarUsuarios(1)">1</button>
+      <button onclick="carregarUsuarios(2)">2</button>
+      <button onclick="carregarUsuarios(3)">3</button>
+    </div>
+
   </main>
+
 
   <!-- ===== MODAL ===== -->
   <div id="modalEditar" class="modal hidden">
