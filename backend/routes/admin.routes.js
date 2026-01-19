@@ -29,7 +29,7 @@ router.get("/", authAdmin, async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Erro ao listar usuários" });
+    res.status(500).json({ "erro:": error });
   }
 });
 
