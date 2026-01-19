@@ -60,7 +60,7 @@ router.post("/", async (req, res) => {
         NULL,
         0,
         'never_visited',
-        'Rank bronze'
+        'Bronze'
       )
       RETURNING
         id,

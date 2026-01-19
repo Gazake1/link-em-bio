@@ -97,10 +97,11 @@ router.put("/:id", authAdmin, async (req, res) => {
         email = $3,
         data_nascimento = $4,
         frequencia = $5,
-        status_cliente = COALESCE(NULLIF($6, ''), status_cliente),
+        status_cliente = $6,
         rank = $7,
         ultima_visita = $8
       WHERE id = $9
+      RETURNING *
       `,
       [
         nome,
@@ -108,8 +109,8 @@ router.put("/:id", authAdmin, async (req, res) => {
         email,
         data_nascimento,
         frequencia ?? 0,
-        status_cliente,
-        rank || "bronze",
+        status_cliente ?? 'never_visited',
+        rank ?? 'Bronze',
         ultima_visita || null,
         id
       ]
@@ -119,12 +120,13 @@ router.put("/:id", authAdmin, async (req, res) => {
       return res.status(404).json({ error: "Usuário não encontrado" });
     }
 
-    res.json({ success: true });
+    res.json(result.rows[0]);
   } catch (error) {
     console.error("Erro PUT admin/users:", error);
     res.status(500).json({ error: "Erro ao atualizar usuário" });
   }
 });
+
 
 
 export default router;
