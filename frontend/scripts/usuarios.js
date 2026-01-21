@@ -16,7 +16,9 @@ let usuariosCache = [];
 ========================= */
 async function carregarUsuarios(page = 1) {
   const token = localStorage.getItem("token");
-  currentPage = page;
+  if (!token) {
+    alert("Você necessita de fazer um login em: saiba-mais.santos-games.com/login.html")
+  }
 
   const params = new URLSearchParams();
   params.append("page", page);
