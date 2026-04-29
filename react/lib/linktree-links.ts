@@ -23,8 +23,8 @@ export const linktreeLinks: LinktreeLink[] = [
     image: `${basePath}/image/banners/capa03.avif`,
   },
   {
-    title: "Calendário",
-    description: "Calendário de campeonatos",
+    title: "Campeonatos",
+    description: "Campeonatos presencias",
     href: "https://santos-games.com/campeonatos",
     image: `${basePath}/image/banners/capa-calendario.jpg`,
     disabled: false,
