@@ -1,0 +1,1 @@
+tudo foi migrado para a pasta react na raiz

@@ -23,10 +23,10 @@ export const linktreeLinks: LinktreeLink[] = [
     image: `${basePath}/image/banners/capa03.avif`,
   },
   {
-    title: "VCT Ribeirão",
-    description: "Campeonato Presencial",
-    href: "https://santos-games.com/vct-ribeirao",
-    image: `${basePath}/image/banners/vct-ribeirao_sga.avif`,
+    title: "Calendário",
+    description: "Calendário de campeonatos",
+    href: "https://santos-games.com/campeonatos",
+    image: `${basePath}/image/banners/capa-calendario.jpg`,
     disabled: false,
   },
   /*{
@@ -37,13 +37,7 @@ export const linktreeLinks: LinktreeLink[] = [
     disabled: true,
     disabledLabel: "Manutenção",
   },*/
-  {
-    title: "CS Prime",
-    description: "Campeonato Presencial",
-    href: "https://cs-prime.santos-games.com/",
-    image: `${basePath}/image/banners/cs-prime_sga.avif`,
-    disabled: true,
-  },
+
   {
     title: "Lan House",
     description: "Jogue quando quiser",
