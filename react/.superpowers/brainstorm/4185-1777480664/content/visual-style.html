@@ -1,0 +1,308 @@
+<style>
+  .sga-preview-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    margin-top: 22px;
+  }
+
+  .sga-preview-card {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    overflow: hidden;
+    background: #0b0b0d;
+    cursor: pointer;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .sga-preview-card:hover,
+  .sga-preview-card.selected {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.34);
+  }
+
+  .sga-screen {
+    min-height: 430px;
+    padding: 18px;
+    color: white;
+  }
+
+  .sga-hero {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .sga-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sga-logo {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    font-weight: 900;
+    letter-spacing: -0.08em;
+  }
+
+  .sga-pill {
+    display: inline-flex;
+    width: fit-content;
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .sga-title {
+    margin: 0;
+    max-width: 230px;
+    font-size: 24px;
+    line-height: 0.96;
+    letter-spacing: -0.055em;
+  }
+
+  .sga-copy {
+    margin: 0;
+    max-width: 250px;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .sga-cards {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sga-mini-card {
+    min-height: 105px;
+    border-radius: 18px;
+    padding: 11px;
+  }
+
+  .sga-mini-title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .sga-mini-copy {
+    margin: 5px 0 0;
+    font-size: 10px;
+    opacity: 0.72;
+  }
+
+  .sga-shape {
+    height: 42px;
+    margin-top: 13px;
+    border-radius: 12px;
+  }
+
+  .sga-label {
+    padding: 15px 16px 17px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .sga-label h3 {
+    margin: 0 0 6px;
+    color: white;
+    font-size: 16px;
+  }
+
+  .sga-label p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .style-arena .sga-screen {
+    background:
+      radial-gradient(circle at 20% 0%, rgba(255, 44, 44, 0.34), transparent 38%),
+      linear-gradient(135deg, #070707 0%, #111014 58%, #050505 100%);
+  }
+
+  .style-arena .sga-hero,
+  .style-arena .sga-mini-card {
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .style-arena .sga-logo,
+  .style-arena .sga-pill {
+    background: #f20d22;
+    color: white;
+  }
+
+  .style-arena .sga-shape {
+    background: linear-gradient(135deg, rgba(242, 13, 34, 0.96), rgba(255, 180, 45, 0.62));
+  }
+
+  .style-neon .sga-screen {
+    background:
+      radial-gradient(circle at 76% 10%, rgba(0, 255, 202, 0.36), transparent 32%),
+      radial-gradient(circle at 4% 80%, rgba(255, 28, 83, 0.32), transparent 30%),
+      #06070a;
+  }
+
+  .style-neon .sga-hero,
+  .style-neon .sga-mini-card {
+    border: 1px solid rgba(66, 255, 219, 0.26);
+    background: rgba(4, 15, 20, 0.72);
+    box-shadow: 0 0 34px rgba(0, 255, 202, 0.12);
+  }
+
+  .style-neon .sga-logo {
+    background: #45ffdf;
+    color: #031013;
+  }
+
+  .style-neon .sga-pill {
+    background: rgba(69, 255, 223, 0.16);
+    color: #9cfff0;
+    border: 1px solid rgba(69, 255, 223, 0.3);
+  }
+
+  .style-neon .sga-shape {
+    background:
+      linear-gradient(90deg, rgba(69, 255, 223, 0.9) 0 28%, transparent 28% 34%, rgba(255, 28, 83, 0.85) 34% 100%);
+  }
+
+  .style-premium .sga-screen {
+    background:
+      radial-gradient(circle at top, rgba(210, 160, 80, 0.34), transparent 34%),
+      linear-gradient(145deg, #0a0907 0%, #17120c 62%, #040403 100%);
+  }
+
+  .style-premium .sga-hero,
+  .style-premium .sga-mini-card {
+    border: 1px solid rgba(240, 204, 128, 0.2);
+    background: rgba(255, 247, 224, 0.055);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
+  }
+
+  .style-premium .sga-logo,
+  .style-premium .sga-pill {
+    background: #e8b75d;
+    color: #120b05;
+  }
+
+  .style-premium .sga-shape {
+    background:
+      linear-gradient(135deg, rgba(232, 183, 93, 0.92), rgba(132, 70, 24, 0.72)),
+      repeating-linear-gradient(90deg, transparent 0 8px, rgba(255, 255, 255, 0.2) 8px 9px);
+  }
+</style>
+
+<h2>Escolha a direção estética da nova identidade visual</h2>
+<p class="subtitle">
+  A estrutura continuará igual: cabeçalho com marca, grade de cards e rodapé. A mudança será apenas visual: cores, atmosfera, bordas, textura, tipografia e tratamento dos cards.
+</p>
+
+<div class="sga-preview-grid">
+  <div class="sga-preview-card style-arena" data-choice="arena-red" onclick="toggleSelect(this)">
+    <div class="sga-screen">
+      <div class="sga-hero">
+        <div class="sga-brand-row">
+          <div class="sga-logo">SG</div>
+          <div>
+            <div class="sga-pill">Atalhos oficiais</div>
+            <h4 class="sga-title">Santos Games Arena</h4>
+          </div>
+        </div>
+        <p class="sga-copy">Identidade forte, competitiva e direta, puxando o vermelho da marca com textura de arena.</p>
+      </div>
+      <div class="sga-cards">
+        <div class="sga-mini-card">
+          <p class="sga-mini-title">Corujão</p>
+          <p class="sga-mini-copy">Das 21h as 07h</p>
+          <div class="sga-shape"></div>
+        </div>
+        <div class="sga-mini-card">
+          <p class="sga-mini-title">Suporte</p>
+          <p class="sga-mini-copy">Fale conosco</p>
+          <div class="sga-shape"></div>
+        </div>
+      </div>
+    </div>
+    <div class="sga-label">
+      <h3>A. Arena Vermelha</h3>
+      <p>Mais fiel ao vermelho/preto atual, com acabamento mais agressivo, esportivo e institucional.</p>
+    </div>
+  </div>
+
+  <div class="sga-preview-card style-neon" data-choice="neon-night" onclick="toggleSelect(this)">
+    <div class="sga-screen">
+      <div class="sga-hero">
+        <div class="sga-brand-row">
+          <div class="sga-logo">SG</div>
+          <div>
+            <div class="sga-pill">Ribeirão Preto</div>
+            <h4 class="sga-title">Santos Games Arena</h4>
+          </div>
+        </div>
+        <p class="sga-copy">Visual de madrugada gamer, com contrastes neon, brilho e sensação de evento.</p>
+      </div>
+      <div class="sga-cards">
+        <div class="sga-mini-card">
+          <p class="sga-mini-title">Corujão</p>
+          <p class="sga-mini-copy">Das 21h as 07h</p>
+          <div class="sga-shape"></div>
+        </div>
+        <div class="sga-mini-card">
+          <p class="sga-mini-title">Suporte</p>
+          <p class="sga-mini-copy">Fale conosco</p>
+          <div class="sga-shape"></div>
+        </div>
+      </div>
+    </div>
+    <div class="sga-label">
+      <h3>B. Neon Night</h3>
+      <p>Mais chamativo e gamer, com ciano/rosa sobre preto. Bom para impacto, menos institucional.</p>
+    </div>
+  </div>
+
+  <div class="sga-preview-card style-premium" data-choice="premium-lounge" onclick="toggleSelect(this)">
+    <div class="sga-screen">
+      <div class="sga-hero">
+        <div class="sga-brand-row">
+          <div class="sga-logo">SG</div>
+          <div>
+            <div class="sga-pill">Arena premium</div>
+            <h4 class="sga-title">Santos Games Arena</h4>
+          </div>
+        </div>
+        <p class="sga-copy">Visual mais sofisticado, com preto, dourado e sensação de lounge gamer premium.</p>
+      </div>
+      <div class="sga-cards">
+        <div class="sga-mini-card">
+          <p class="sga-mini-title">Corujão</p>
+          <p class="sga-mini-copy">Das 21h as 07h</p>
+          <div class="sga-shape"></div>
+        </div>
+        <div class="sga-mini-card">
+          <p class="sga-mini-title">Suporte</p>
+          <p class="sga-mini-copy">Fale conosco</p>
+          <div class="sga-shape"></div>
+        </div>
+      </div>
+    </div>
+    <div class="sga-label">
+      <h3>C. Premium Lounge</h3>
+      <p>Mais elegante e premium. Funciona se a prioridade for percepção de estrutura e valor.</p>
+    </div>
+  </div>
+</div>
