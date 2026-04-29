@@ -29,14 +29,14 @@ export const linktreeLinks: LinktreeLink[] = [
     image: `${basePath}/image/banners/vct-ribeirao_sga.avif`,
     disabled: false,
   },
-  {
+  /*{
     title: "Corujão",
     description: "Das 21h as 07h",
     href: "/corujao",
     image: `${basePath}/image/banners/capa001.avif`,
     disabled: true,
     disabledLabel: "Manutenção",
-  },
+  },*/
   {
     title: "CS Prime",
     description: "Campeonato Presencial",
