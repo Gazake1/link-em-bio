@@ -144,7 +144,7 @@ export default function Home() {
                   </h1>
                   <p className="max-w-3xl text-sm leading-7 text-stone-300 sm:text-base">
                     Central de links da SGA para suporte, campeonatos e canais
-                    oficiais. Os estados de “em breve” continuam visíveis.
+                    oficiais.
                   </p>
                 </div>
               </div>

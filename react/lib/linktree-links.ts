@@ -19,7 +19,7 @@ export const linktreeLinks: LinktreeLink[] = [
   {
     title: "Twitch",
     description: "Nossas lives",
-    href: "https://www.twitch.tv/santosgamesesports",
+    href: "https://www.twitch.tv/santosgamesarena",
     image: `${basePath}/image/banners/capa03.avif`,
   },
   {
