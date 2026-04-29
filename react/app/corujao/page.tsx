@@ -121,6 +121,7 @@ export default function CorujaoPage() {
                     src="/saiba-mais/image/logo-sg.png"
                     alt="Santos Games Arena"
                     fill
+                    unoptimized
                     sizes="56px"
                     className="object-contain p-2"
                     priority
@@ -158,6 +159,7 @@ export default function CorujaoPage() {
                 src="/saiba-mais/image/banners/capa001.avif"
                 alt=""
                 fill
+                unoptimized
                 sizes="100vw"
                 className="object-cover"
                 priority

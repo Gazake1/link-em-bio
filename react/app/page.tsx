@@ -58,6 +58,7 @@ function LinkCard({
             src={image}
             alt=""
             fill
+            unoptimized
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className={`object-cover transition duration-500 group-hover:scale-[1.04] ${
               disabled
@@ -119,6 +120,7 @@ export default function Home() {
                   src="/saiba-mais/image/logo-sg.png"
                   alt="Santos Games Arena"
                   fill
+                  unoptimized
                   sizes="72px"
                   className="object-contain p-2"
                   priority
