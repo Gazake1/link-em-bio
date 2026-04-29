@@ -1,0 +1,10 @@
+.git
+.next
+dist
+node_modules
+.superpowers
+.codex
+coverage
+*.log
+Dockerfile
+.dockerignore

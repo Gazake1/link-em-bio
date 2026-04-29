@@ -8,7 +8,7 @@ O projeto usa Next 16 App Router com Tailwind CSS v4. O arquivo `AGENTS.md` exig
 
 - Aplicar uma nova identidade visual na home `/` com a direcao escolhida `Arena Vermelha`.
 - Usar a abordagem de tokens globais, mesmo com possivel impacto visual temporario em `/corujao`, conforme confirmacao do usuario.
-- Remover temporariamente o atalho `Corujao` da home `/`.
+- Exibir o atalho `Corujao` na home `/` como item em manutencao, sem link clicavel.
 - Preservar a rota `/corujao` e seus arquivos sem edicao funcional nesta etapa.
 - Preservar a disposicao dos elementos da home: header, separador, grade de cards e footer.
 
@@ -25,11 +25,11 @@ Elementos visuais previstos:
 - Badges e icones usando vermelho como principal acento.
 - Footer preservado, apenas com contraste e borda coerentes com a nova identidade.
 
-## Remocao Temporaria Do Corujao
+## Corujao Em Manutencao
 
-O card `Corujao` deve deixar de aparecer na home. A implementacao pode filtrar o item na renderizacao da home ou removelo da lista compartilhada, desde que testes existentes continuem coerentes e a rota `/corujao` permaneca intacta.
+O card `Corujao` deve aparecer na home como item desabilitado, com label `Manutencao`. A rota `/corujao` permanece intacta, mas o card da home nao deve ser clicavel enquanto estiver em manutencao.
 
-Preferencia tecnica: filtrar na home para evitar alterar dados compartilhados usados por testes ou por outras rotas.
+Os demais itens desabilitados continuam usando o estado padrao `Em breve`.
 
 ## Acessibilidade
 
@@ -49,6 +49,6 @@ Depois da implementacao:
 ## Fora De Escopo
 
 - Criar novo layout para a home.
-- Alterar conteudo textual dos links, exceto a ausencia temporaria do Corujao.
+- Alterar conteudo textual dos links, exceto o label de manutencao do Corujao.
 - Alterar comportamento ou conteudo da pagina `/corujao`.
 - Adicionar novas imagens ou dependencias externas.
