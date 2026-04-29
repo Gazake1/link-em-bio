@@ -116,14 +116,14 @@ export default function CorujaoPage() {
           <header className="flex flex-col gap-4 rounded-[1.75rem] border border-white/10 bg-white/[0.04] px-4 py-4 shadow-[0_28px_100px_-48px_rgba(0,0,0,0.95)] backdrop-blur-xl sm:px-6 sm:py-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center gap-3">
-                <div className="relative size-14 overflow-hidden rounded-[1rem] border border-white/10 bg-white/5">
+                <div className="relative h-10 w-40 max-w-full overflow-hidden rounded-[0.9rem] border border-white/10 bg-white/5 sm:h-11 sm:w-44">
                   <Image
-                    src="/saiba-mais/image/logo-sg.png"
+                    src="/saiba-mais/image/sga-logo.png"
                     alt="Santos Games Arena"
                     fill
                     unoptimized
-                    sizes="56px"
-                    className="object-contain p-2"
+                    sizes="(max-width: 640px) 160px, 176px"
+                    className="object-contain p-1.5"
                     priority
                   />
                 </div>

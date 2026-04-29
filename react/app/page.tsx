@@ -115,14 +115,14 @@ export default function Home() {
           <header className="relative overflow-hidden rounded-[1.65rem] border border-primary/20 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(164,11,26,0.12)_42%,rgba(10,3,3,0.68))] px-4 py-5 shadow-[0_30px_110px_-48px_rgba(255,22,42,0.5)] ring-1 ring-white/5 backdrop-blur-xl sm:px-6 sm:py-6">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(255,28,48,0.2),transparent_38%),linear-gradient(110deg,transparent,rgba(255,255,255,0.055),transparent)]" />
             <div className="relative grid gap-5 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-center">
-              <div className="relative size-16 overflow-hidden rounded-[1.1rem] border border-primary/25 bg-black/35 shadow-[0_18px_50px_-24px_rgba(255,25,45,0.75)] ring-1 ring-white/10 sm:size-20">
+              <div className="relative h-12 w-44 max-w-full overflow-hidden rounded-[1rem] border border-primary/25 bg-black/35 shadow-[0_18px_50px_-24px_rgba(255,25,45,0.75)] ring-1 ring-white/10 sm:h-14 sm:w-52">
                 <Image
-                  src="/saiba-mais/image/logo-sg.png"
+                  src="/saiba-mais/image/sga-logo.png"
                   alt="Santos Games Arena"
                   fill
                   unoptimized
-                  sizes="72px"
-                  className="object-contain p-2"
+                  sizes="(max-width: 640px) 176px, 208px"
+                  className="object-contain p-1.5"
                   priority
                 />
               </div>
