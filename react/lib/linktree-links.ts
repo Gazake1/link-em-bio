@@ -11,6 +11,13 @@ const basePath = "/saiba-mais";
 
 export const linktreeLinks: LinktreeLink[] = [
   {
+    title: "Campeonatos",
+    description: "Campeonatos presencias",
+    href: "https://santos-games.com/campeonatos",
+    image: `${basePath}/image/banners/capa-calendario.jpg`,
+    disabled: false,
+  },
+  {
     title: "Suporte",
     description: "Fale conosco",
     href: "https://wa.me/5516991069776?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20com%20algumas%20informa%C3%A7%C3%B5es",
@@ -22,13 +29,7 @@ export const linktreeLinks: LinktreeLink[] = [
     href: "https://www.twitch.tv/santosgamesarena",
     image: `${basePath}/image/banners/capa03.avif`,
   },
-  {
-    title: "Campeonatos",
-    description: "Campeonatos presencias",
-    href: "https://santos-games.com/campeonatos",
-    image: `${basePath}/image/banners/capa-calendario.jpg`,
-    disabled: false,
-  },
+  
   /*{
     title: "Corujão",
     description: "Das 21h as 07h",
